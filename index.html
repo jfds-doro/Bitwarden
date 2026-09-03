@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bitwarden — Guides du Support Informatique DORO</title>
+<meta name="description" content="Présentation de Bitwarden et guides pratiques DORO : importer vos mots de passe et gérer les éléments de votre coffre.">
+<link rel="icon" type="image/svg+xml" href="assets/monogramme.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sage:#94A6A1;
+    --sage-dark:#606967;
+    --sage-mid:#7F8C89;
+    --ink:#1D1E1C;
+    --white:#FFFFFF;
+    --bg:#f4f5f4;
+    --card:#ffffff;
+    --muted:#5b6360;
+    --line:#e4e7e5;
+    --sage-tint:#eef1f0;
+    --radius:10px;
+    --maxw:940px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:"Montserrat","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.65;font-size:16.5px;
+  }
+  a{color:var(--sage-dark);}
+  h1,h2,h3{font-family:"Bebas Neue","Montserrat",sans-serif;font-weight:400;letter-spacing:.06em;}
+
+  header.hero{background:var(--ink);color:var(--white);padding:0 20px 50px;text-align:center;border-bottom:3px solid var(--sage);}
+  .topbar{max-width:var(--maxw);margin:0 auto;padding:20px 0 30px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+  .topbar img{height:52px;display:block;}
+  .topbar .dept{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--sage);font-weight:600;}
+  header.hero .wrap{max-width:720px;margin:0 auto;}
+  header.hero h1{margin:14px 0 16px;font-size:3rem;line-height:1.05;letter-spacing:.04em;}
+  header.hero h1 .accent{color:var(--sage);}
+  header.hero p{margin:0 auto;max-width:620px;font-size:1.08rem;opacity:.9;line-height:1.6;}
+
+  main{max-width:var(--maxw);margin:0 auto;padding:0 20px 80px;}
+  section{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px 30px;margin-top:24px;box-shadow:0 1px 3px rgba(29,30,28,.04);}
+  h2{font-size:1.7rem;margin:0 0 14px;color:var(--ink);}
+  .lead{color:var(--muted);}
+  ul{padding-left:22px;}li{margin:6px 0;}
+
+  /* CARTES PROCÉDURES */
+  .guides{display:grid;grid-template-columns:1fr;gap:18px;margin-top:26px;}
+  @media(min-width:680px){.guides{grid-template-columns:1fr 1fr;}}
+  .guide-card{
+    display:flex;flex-direction:column;text-decoration:none;color:inherit;
+    background:var(--card);border:1px solid var(--line);border-radius:12px;padding:26px 26px 24px;
+    box-shadow:0 1px 3px rgba(29,30,28,.05);transition:transform .15s, box-shadow .15s, border-color .15s;
+  }
+  .guide-card:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(29,30,28,.12);border-color:var(--sage);}
+  .guide-card .ico{font-size:2.2rem;margin-bottom:10px;}
+  .guide-card h3{font-size:1.35rem;margin:0 0 8px;color:var(--ink);}
+  .guide-card p{margin:0 0 16px;color:var(--muted);font-size:.95rem;flex:1;}
+  .guide-card .go{align-self:flex-start;background:var(--sage);color:var(--ink);font-weight:600;font-size:.9rem;
+    padding:9px 18px;border-radius:999px;font-family:"Montserrat",sans-serif;}
+  .guide-card:hover .go{background:var(--sage-dark);color:#fff;}
+
+  /* FEATURES */
+  .feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:14px;}
+  .feat .item{border:1px solid var(--line);border-radius:10px;padding:15px 17px;background:#fbfcfc;}
+  .feat .item .ico{font-size:1.4rem;}
+  .feat .item h3{font-size:1.05rem;margin:6px 0 4px;color:var(--ink);}
+  .feat .item p{margin:0;font-size:.9rem;color:var(--muted);}
+
+  .sec-list li strong{color:var(--ink);}
+
+  footer{background:var(--ink);color:#c4ccc9;text-align:center;padding:36px 20px 42px;margin-top:10px;}
+  footer img{height:52px;margin-bottom:14px;opacity:.95;}
+  footer a{color:var(--sage);}
+  footer p{margin:6px 0;font-size:.9rem;}
+  .updated{font-size:.8rem;color:#8b938f;margin-top:12px;}
+  @media(max-width:600px){header.hero h1{font-size:2.2rem;}h2{font-size:1.4rem;}body{font-size:16px;}section{padding:22px 18px;}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="topbar">
+    <img src="assets/logo-doro-blanc.svg" alt="DORO — Packaging de luxe">
+    <span class="dept">Support Informatique</span>
+  </div>
+  <div class="wrap">
+    <h1>Le gestionnaire de mots de passe <span class="accent">Bitwarden</span></h1>
+    <p>Bitwarden crée, enregistre et remplit automatiquement des mots de passe forts et uniques pour chacun de vos comptes. Vous n'avez plus qu'un seul mot de passe à retenir : le vôtre.</p>
+  </div>
+</header>
+
+<main>
+
+  <!-- POURQUOI -->
+  <section id="pourquoi">
+    <h2>À quoi ça sert ?</h2>
+    <p class="lead">Utiliser le même mot de passe partout est risqué : si un site est piraté, tous vos comptes deviennent vulnérables. Bitwarden génère un mot de passe différent et solide pour chaque site, les stocke en sécurité, et les saisit à votre place. Résultat : plus besoin de les mémoriser ni de les noter quelque part.</p>
+  </section>
+
+  <!-- LES DEUX GUIDES -->
+  <section id="guides">
+    <h2>Nos guides pratiques</h2>
+    <p class="lead">Deux procédures pas à pas préparées par le Support Informatique pour vous accompagner :</p>
+    <div class="guides">
+      <a class="guide-card" href="importer.html">
+        <div class="ico">📥</div>
+        <h3>Importer vos mots de passe</h3>
+        <p>Transférez d'un coup tous vos identifiants depuis votre navigateur ou un autre gestionnaire, sans les ressaisir. Toutes les méthodes et les formats de fichiers acceptés.</p>
+        <span class="go">Ouvrir le guide →</span>
+      </a>
+      <a class="guide-card" href="gestion.html">
+        <div class="ico">🗂️</div>
+        <h3>Gérer les éléments du coffre</h3>
+        <p>Ajouter, modifier, archiver, supprimer, dupliquer et partager vos éléments — avec les captures d'écran pour chaque application (web, navigateur, mobile, bureau).</p>
+        <span class="go">Ouvrir le guide →</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- FONCTIONNALITÉS -->
+  <section id="fonctionnalites">
+    <h2>Les fonctions les plus utiles</h2>
+    <div class="feat">
+      <div class="item"><div class="ico">📥</div><h3>Import facile</h3><p>Récupérez vos identifiants depuis presque n'importe quel gestionnaire de mots de passe.</p></div>
+      <div class="item"><div class="ico">⚡</div><h3>Remplissage automatique</h3><p>Connectez-vous aux sites en un clic depuis le navigateur ou le mobile.</p></div>
+      <div class="item"><div class="ico">🎲</div><h3>Générateur</h3><p>Créez des mots de passe et noms d'utilisateur solides lors de vos inscriptions.</p></div>
+      <div class="item"><div class="ico">🔢</div><h3>Codes 2FA intégrés</h3><p>Générez et remplissez les codes temporaires (TOTP) de la double authentification.</p></div>
+      <div class="item"><div class="ico">🛡️</div><h3>Connexion en deux étapes</h3><p>Renforcez la sécurité de vos accès avec plusieurs méthodes de vérification.</p></div>
+    </div>
+  </section>
+
+  <!-- SÉCURITÉ -->
+  <section id="securite">
+    <h2>Une conception « sécurité d'abord »</h2>
+    <ul class="sec-list">
+      <li><strong>Chiffrement de bout en bout</strong> : le chiffrement et le déchiffrement se font sur votre appareil. Aucune donnée sensible ne circule en clair vers les serveurs.</li>
+      <li><strong>Zéro connaissance</strong> : personne chez Bitwarden ne peut voir le contenu de votre coffre, ni votre mot de passe principal.</li>
+      <li><strong>Open source</strong> : le code est public sur GitHub et audité régulièrement par des experts indépendants.</li>
+    </ul>
+  </section>
+
+  <!-- APPLICATIONS -->
+  <section id="applications">
+    <h2>Disponible sur tous vos appareils</h2>
+    <p class="lead">Bitwarden propose une application adaptée à chaque usage :</p>
+    <ul class="sec-list">
+      <li><strong>Application web</strong> : le centre d'administration de votre coffre, depuis un navigateur.</li>
+      <li><strong>Extension navigateur</strong> : idéale pour le remplissage automatique et la création d'identifiants au fil de la navigation.</li>
+      <li><strong>Applications mobiles</strong> : vos identifiants en sécurité, où que vous soyez.</li>
+      <li><strong>Application bureau</strong> : une expérience complète installée sur votre ordinateur.</li>
+      <li><strong>Ligne de commande (CLI)</strong> : un outil puissant pour les usages techniques et automatisés.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  <img src="assets/logo-doro-blanc.svg" alt="DORO — Packaging de luxe">
+  <p>Guides internes rédigés par le Support Informatique DORO, à partir de la documentation officielle Bitwarden.</p>
+  <p>Source : <a href="https://bitwarden.com/help/password-manager-overview/" target="_blank" rel="noopener">bitwarden.com/help/password-manager-overview</a>.</p>
+  <p class="updated">En cas de difficulté, contactez le <a href="mailto:support@doro.mc">Support Informatique</a>.</p>
+</footer>
+
+</body>
+</html>

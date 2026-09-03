@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gérer les éléments de votre coffre Bitwarden — DORO</title>
+<meta name="description" content="Guide DORO : comment ajouter, modifier, archiver, supprimer, cloner et partager les éléments de votre coffre Bitwarden.">
+<link rel="icon" type="image/svg+xml" href="assets/monogramme.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Charte graphique DORO */
+    --sage:#94A6A1;          /* vert sauge signature */
+    --sage-dark:#606967;
+    --sage-mid:#7F8C89;
+    --ink:#1D1E1C;           /* noir DORO */
+    --white:#FFFFFF;
+    --bg:#f4f5f4;
+    --card:#ffffff;
+    --muted:#5b6360;
+    --line:#e4e7e5;
+    --sage-tint:#eef1f0;
+    --warn-bg:#f6f1e8;
+    --warn-line:#c9a24b;
+    --radius:10px;
+    --maxw:940px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:"Montserrat","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.65;
+    font-size:16.5px;
+  }
+  a{color:var(--sage-dark);}
+  h1,h2,h3,.brand-type{font-family:"Bebas Neue","Montserrat",sans-serif;font-weight:400;letter-spacing:.06em;}
+
+  /* HERO */
+  header.hero{
+    background:var(--ink);
+    color:var(--white);
+    padding:0 20px 46px;
+    text-align:center;
+    border-bottom:3px solid var(--sage);
+  }
+  .topbar{
+    max-width:var(--maxw);margin:0 auto;padding:20px 0 30px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+  }
+  .topbar img{height:52px;display:block;}
+  .topbar a{color:var(--sage);text-decoration:none;}
+  .topbar .dept a:hover{text-decoration:underline;}
+  .topbar .dept{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--sage);font-weight:600;font-family:"Montserrat",sans-serif;}
+  header.hero .wrap{max-width:720px;margin:0 auto;}
+  header.hero h1{margin:14px 0 14px;font-size:2.8rem;line-height:1.05;letter-spacing:.04em;}
+  header.hero h1 .accent{color:var(--sage);}
+  header.hero p{margin:0 auto;max-width:600px;font-size:1.05rem;opacity:.88;font-weight:400;letter-spacing:0;line-height:1.6;}
+
+  main{max-width:var(--maxw);margin:0 auto;padding:0 20px 80px;}
+  section{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:28px 30px;
+    margin-top:24px;
+    box-shadow:0 1px 3px rgba(29,30,28,.04);
+  }
+  h2{font-size:1.75rem;margin:0 0 6px;display:flex;align-items:center;gap:14px;color:var(--ink);}
+  h2 .num{
+    background:var(--sage);color:var(--ink);min-width:38px;height:38px;border-radius:50%;
+    display:inline-flex;align-items:center;justify-content:center;font-size:1.25rem;flex:0 0 auto;
+    font-family:"Bebas Neue",sans-serif;padding-top:3px;
+  }
+  h3{font-size:1.2rem;margin:24px 0 8px;color:var(--sage-dark);letter-spacing:.04em;}
+  .lead{color:var(--muted);margin-top:2px;}
+  ol,ul{padding-left:22px;}
+  ol li,ul li{margin:6px 0;}
+
+  /* SOMMAIRE */
+  .toc{
+    background:var(--sage-tint);border:1px solid #d9e0dd;border-radius:var(--radius);
+    padding:20px 24px;margin-top:24px;
+  }
+  .toc h2{font-size:1.3rem;color:var(--sage-dark);margin-bottom:12px;}
+  .toc ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px 20px;}
+  .toc a{text-decoration:none;font-weight:500;font-size:.98rem;}
+  .toc a:hover{text-decoration:underline;}
+
+  /* CARTES TYPES */
+  .types-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-top:16px;}
+  .type-card{
+    border:1px solid var(--line);border-radius:10px;padding:16px 18px;background:#fbfcfc;
+  }
+  .type-card .ico{font-size:1.5rem;}
+  .type-card h3{margin:6px 0 4px;font-size:1.1rem;color:var(--ink);}
+  .type-card p{margin:0;font-size:.92rem;color:var(--muted);}
+
+  /* ONGLETS */
+  .tabs{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 22px;}
+  .tab-btn{
+    border:1px solid var(--line);background:#fff;color:var(--muted);
+    padding:9px 16px;border-radius:999px;cursor:pointer;font-size:.92rem;font-weight:600;
+    font-family:"Montserrat",sans-serif;transition:all .15s;
+  }
+  .tab-btn:hover{border-color:var(--sage);color:var(--sage-dark);}
+  .tab-btn.active{background:var(--sage);border-color:var(--sage);color:var(--ink);}
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+
+  /* CALLOUTS */
+  .callout{border-radius:8px;padding:13px 16px;margin:14px 0;font-size:.95rem;}
+  .callout.note{background:var(--sage-tint);border-left:4px solid var(--sage-mid);}
+  .callout.warn{background:var(--warn-bg);border-left:4px solid var(--warn-line);}
+  .callout.tip{background:var(--sage-tint);border-left:4px solid var(--sage);}
+  .callout strong{display:block;margin-bottom:2px;color:var(--ink);}
+
+  code{background:var(--sage-tint);padding:2px 6px;border-radius:5px;font-size:.9em;font-family:Consolas,Menlo,monospace;color:var(--sage-dark);}
+  pre{background:var(--ink);color:#eef1f0;padding:14px 16px;border-radius:8px;overflow-x:auto;font-size:.9rem;}
+  pre code{background:none;color:inherit;padding:0;}
+
+  /* CAPTURES */
+  figure.shot{margin:16px 0 4px;}
+  figure.shot img{
+    width:100%;height:auto;display:block;
+    border:1px solid var(--line);border-radius:8px;
+    box-shadow:0 2px 8px rgba(29,30,28,.08);background:#fff;
+  }
+  figure.shot figcaption{
+    font-size:.82rem;color:var(--muted);margin-top:6px;text-align:center;font-style:italic;
+  }
+  .shots-2{display:grid;grid-template-columns:1fr;gap:16px;}
+  @media(min-width:680px){.shots-2{grid-template-columns:1fr 1fr;align-items:start;}}
+
+  /* FOOTER */
+  footer{background:var(--ink);color:#c4ccc9;text-align:center;padding:36px 20px 42px;margin-top:10px;}
+  footer img{height:52px;margin-bottom:14px;opacity:.95;}
+  footer a{color:var(--sage);}
+  footer p{margin:6px 0;font-size:.9rem;}
+  .updated{font-size:.8rem;color:#8b938f;margin-top:12px;}
+  @media(max-width:600px){
+    header.hero h1{font-size:2.1rem;}
+    h2{font-size:1.45rem;}
+    body{font-size:16px;}
+    section{padding:22px 18px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="topbar">
+    <a href="index.html" aria-label="Accueil"><img src="assets/logo-doro-blanc.svg" alt="DORO — Packaging de luxe"></a>
+    <span class="dept"><a href="index.html">← Accueil</a> &nbsp;·&nbsp; Support Informatique</span>
+  </div>
+  <div class="wrap">
+    <h1>Gérer les éléments de votre coffre <span class="accent">Bitwarden</span></h1>
+    <p>Ce guide vous explique comment ajouter, modifier, archiver, supprimer, dupliquer et partager les éléments enregistrés dans votre coffre Bitwarden.</p>
+  </div>
+</header>
+
+<main>
+
+  <nav class="toc" aria-label="Sommaire">
+    <h2>Sommaire</h2>
+    <ul>
+      <li><a href="#types">1. Les types d'éléments</a></li>
+      <li><a href="#ajouter">2. Ajouter un élément</a></li>
+      <li><a href="#modifier">3. Modifier un élément</a></li>
+      <li><a href="#archiver">4. Archiver un élément</a></li>
+      <li><a href="#supprimer">5. Supprimer un élément</a></li>
+      <li><a href="#cloner">6. Dupliquer (cloner) un élément</a></li>
+      <li><a href="#partager">7. Partager un élément</a></li>
+      <li><a href="#suite">8. Pour aller plus loin</a></li>
+    </ul>
+  </nav>
+
+  <!-- 1. TYPES -->
+  <section id="types">
+    <h2><span class="num">1</span> Les types d'éléments</h2>
+    <p class="lead">Bitwarden ne stocke pas seulement des identifiants et des mots de passe. Vous pouvez enregistrer cinq types d'éléments dans votre coffre :</p>
+    <div class="types-grid">
+      <div class="type-card">
+        <div class="ico">🔑</div>
+        <h3>Identifiant (Login)</h3>
+        <p>Couples nom d'utilisateur / mot de passe, pour le remplissage automatique dans le navigateur et sur mobile. Peut aussi contenir des clés d'accès (passkeys) et des codes de vérification.</p>
+      </div>
+      <div class="type-card">
+        <div class="ico">💳</div>
+        <h3>Carte (Card)</h3>
+        <p>Informations de carte bancaire, pour le remplissage automatique lors de vos paiements en ligne.</p>
+      </div>
+      <div class="type-card">
+        <div class="ico">🪪</div>
+        <h3>Identité (Identity)</h3>
+        <p>Informations personnelles (adresse postale, etc.), pour remplir automatiquement les formulaires en ligne.</p>
+      </div>
+      <div class="type-card">
+        <div class="ico">📝</div>
+        <h3>Note sécurisée</h3>
+        <p>Texte libre pour toute information que vous souhaitez protéger.</p>
+      </div>
+      <div class="type-card">
+        <div class="ico">🖥️</div>
+        <h3>Clé SSH</h3>
+        <p>Utilisez Bitwarden comme agent SSH pour vos connexions techniques.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. AJOUTER -->
+  <section id="ajouter">
+    <h2><span class="num">2</span> Ajouter un élément</h2>
+    <p class="lead">Vous pouvez ajouter un élément depuis n'importe quelle application Bitwarden. Choisissez votre plateforme ci-dessous.</p>
+    <div class="callout tip">
+      <strong>Astuce</strong>
+      Pour transférer beaucoup d'éléments d'un ancien outil, il est souvent plus rapide de les <a href="importer.html">importer directement</a> plutôt que de les saisir un par un.
+    </div>
+
+    <div class="callout note">
+      <strong>À propos des captures d'écran</strong>
+      Les captures ci-dessous proviennent de la documentation officielle Bitwarden et sont en anglais. L'interface Bitwarden peut être basculée en français dans ses paramètres ; les boutons restent au même emplacement.
+    </div>
+
+    <div class="tabs" role="tablist" data-group="add">
+      <button class="tab-btn active" data-tab="add-web">💻 Application web</button>
+      <button class="tab-btn" data-tab="add-ext">🧩 Extension navigateur</button>
+      <button class="tab-btn" data-tab="add-mobile">📱 Mobile</button>
+      <button class="tab-btn" data-tab="add-desktop">🖥️ Application bureau</button>
+      <button class="tab-btn" data-tab="add-cli">⌨️ Ligne de commande</button>
+    </div>
+    <div class="tab-panel active" data-panel="add-web">
+      <p>Cliquez sur le bouton <strong>Nouveau</strong> (New), puis choisissez le type d'élément à créer.</p>
+      <figure class="shot"><img src="assets/screens/add-web.jpg" alt="Ajouter un élément — application web" loading="lazy"><figcaption>Bouton « New » et choix du type d'élément (application web)</figcaption></figure>
+    </div>
+    <div class="tab-panel" data-panel="add-ext">
+      <p>Cliquez sur le bouton <strong>Nouveau</strong> (New), puis choisissez le type d'élément à créer.</p>
+      <figure class="shot"><img src="assets/screens/add-ext.jpg" alt="Ajouter un élément — extension navigateur" loading="lazy"><figcaption>Bouton « New » (extension navigateur)</figcaption></figure>
+    </div>
+    <div class="tab-panel" data-panel="add-mobile">
+      <p>Touchez le bouton <strong>Nouveau</strong> (New), puis choisissez le type d'élément à créer.</p>
+      <figure class="shot"><img src="assets/screens/add-mobile.jpg" alt="Ajouter un élément — mobile" loading="lazy"><figcaption>Bouton « New » (application mobile)</figcaption></figure>
+    </div>
+    <div class="tab-panel" data-panel="add-desktop">
+      <p>Cliquez sur le bouton <strong>Nouveau</strong> (New), puis choisissez le type d'élément à créer.</p>
+      <figure class="shot"><img src="assets/screens/add-desktop.jpg" alt="Ajouter un élément — application bureau" loading="lazy"><figcaption>Bouton « New » (application bureau)</figcaption></figure>
+    </div>
+    <div class="tab-panel" data-panel="add-cli">
+      <p>Utilisez la commande <code>create</code> pour ajouter un nouvel élément.</p>
+      <pre><code>bw create item &lt;données&gt;</code></pre>
+      <p>Consultez la documentation CLI de Bitwarden pour le détail des paramètres.</p>
+    </div>
+  </section>
+
+  <!-- 3. MODIFIER -->
+  <section id="modifier">
+    <h2><span class="num">3</span> Modifier un élément</h2>
+    <p class="lead">Choisissez votre plateforme pour voir comment modifier un élément existant.</p>
+    <div class="tabs" role="tablist" data-group="edit">
+      <button class="tab-btn active" data-tab="edit-web">💻 Application web</button>
+      <button class="tab-btn" data-tab="edit-ext">🧩 Extension navigateur</button>
+      <button class="tab-btn" data-tab="edit-mobile">📱 Mobile</button>
+      <button class="tab-btn" data-tab="edit-desktop">🖥️ Application bureau</button>
+      <button class="tab-btn" data-tab="edit-cli">⌨️ Ligne de commande</button>
+    </div>
+    <div class="tab-panel active" data-panel="edit-web">
+      <p>Cliquez sur le <strong>menu d'options</strong> (⋮) de l'élément à modifier.</p>
+      <div class="callout tip"><strong>Astuce</strong>Vous pouvez aussi faire un clic droit sur l'élément pour ouvrir le même menu.</div>
+      <figure class="shot"><img src="assets/screens/edit-web.jpg" alt="Modifier un élément — application web" loading="lazy"><figcaption>Menu d'options d'un élément (application web)</figcaption></figure>
+    </div>
+    <div class="tab-panel" data-panel="edit-ext">
+      <p>Cliquez sur l'élément pour l'ouvrir, puis sur <strong>Modifier</strong> (Edit).</p>
+      <figure class="shot"><img src="assets/screens/edit-ext.jpg" alt="Modifier un élément — extension navigateur" loading="lazy"><figcaption>Ouvrir l'élément puis « Edit » (extension navigateur)</figcaption></figure>
+    </div>
+    <div class="tab-panel" data-panel="edit-mobile">
+      <p>Ouvrez le <strong>menu d'options</strong> (⋮) de l'élément à modifier, puis touchez <strong>Modifier</strong> (Edit).</p>
+      <figure class="shot"><img src="assets/screens/edit-mobile.jpg" alt="Modifier un élément — mobile" loading="lazy"><figcaption>Menu d'options puis « Edit » (application mobile)</figcaption></figure>
+    </div>
+    <div class="tab-panel" data-panel="edit-desktop">
+      <p>Cliquez sur l'élément pour l'ouvrir, puis sur l'<strong>icône Modifier</strong> (crayon).</p>
+      <figure class="shot"><img src="assets/screens/edit-desktop.jpg" alt="Modifier un élément — application bureau" loading="lazy"><figcaption>Ouvrir l'élément puis l'icône Modifier (application bureau)</figcaption></figure>
+    </div>
+    <div class="tab-panel" data-panel="edit-cli">
+      <p>Utilisez la commande <code>edit</code> pour modifier un élément.</p>
+      <pre><code>bw edit item &lt;item-id&gt; &lt;données&gt;</code></pre>
+    </div>
+  </section>
+
+  <!-- 4. ARCHIVER -->
+  <section id="archiver">
+    <h2><span class="num">4</span> Archiver un élément</h2>
+    <p class="lead">L'archivage est utile pour désencombrer votre coffre. Les éléments archivés sont exclus des résultats de recherche et des suggestions de remplissage automatique, mais restent inclus dans les exports.</p>
+    <div class="callout note">
+      <strong>À savoir sur l'archivage</strong>
+      <ul style="margin:6px 0 0;">
+        <li>Fonctionnalité réservée aux <strong>abonnements payants</strong> (Premium, organisations payantes). Si l'abonnement expire, vous ne perdez pas l'accès aux éléments archivés.</li>
+        <li>L'archivage est propre à chaque utilisateur : archiver un élément partagé ne l'archive pas pour les autres personnes qui y ont accès.</li>
+        <li>L'archivage <strong>ne retire pas</strong> les éléments des rapports ni des exports.</li>
+      </ul>
+    </div>
+
+    <div class="tabs" role="tablist" data-group="arch">
+      <button class="tab-btn active" data-tab="arch-web">💻 Application web</button>
+      <button class="tab-btn" data-tab="arch-ext">🧩 Extension navigateur</button>
+      <button class="tab-btn" data-tab="arch-mobile">📱 Mobile</button>
+      <button class="tab-btn" data-tab="arch-desktop">🖥️ Application bureau</button>
+      <button class="tab-btn" data-tab="arch-cli">⌨️ Ligne de commande</button>
+    </div>
+    <div class="tab-panel active" data-panel="arch-web">
+      <ol>
+        <li>Sélectionnez le ou les éléments à archiver et cliquez sur <strong>Archiver</strong> (Archive) dans la barre d'actions.</li>
+        <li>Confirmez en cliquant sur <strong>Archiver</strong> dans la fenêtre.</li>
+      </ol>
+      <figure class="shot"><img src="assets/screens/arch-web.jpg" alt="Archiver — application web" loading="lazy"><figcaption>Archiver depuis la barre d'actions (application web)</figcaption></figure>
+      <h3>Désarchiver</h3>
+      <p>Sélectionnez <strong>Archive</strong> dans les filtres du coffre, cochez le ou les éléments à restaurer, puis choisissez <strong>Désarchiver</strong> (Unarchive) dans la barre d'actions.</p>
+    </div>
+    <div class="tab-panel" data-panel="arch-ext">
+      <ol>
+        <li>Ouvrez le <strong>menu d'options</strong> (⋮) de l'élément et choisissez <strong>Archiver</strong>.</li>
+        <li>Confirmez en cliquant sur <strong>Archiver</strong> dans la fenêtre.</li>
+      </ol>
+      <figure class="shot"><img src="assets/screens/arch-ext.jpg" alt="Archiver — extension navigateur" loading="lazy"><figcaption>Archiver depuis le menu d'options (extension navigateur)</figcaption></figure>
+      <h3>Désarchiver</h3>
+      <p>Allez dans <strong>Paramètres</strong> → <strong>Options du coffre</strong> → <strong>Archive</strong> pour voir vos éléments archivés, puis utilisez le menu d'options (⋮) pour choisir <strong>Désarchiver</strong>.</p>
+    </div>
+    <div class="tab-panel" data-panel="arch-mobile">
+      <p>Ouvrez le <strong>menu d'options</strong> (⋮) de l'élément et choisissez <strong>Archiver</strong>.</p>
+      <figure class="shot"><img src="assets/screens/arch-mobile.jpg" alt="Archiver — mobile" loading="lazy"><figcaption>Archiver depuis le menu d'options (application mobile)</figcaption></figure>
+      <h3>Désarchiver</h3>
+      <p>Sélectionnez <strong>Archive</strong> dans les filtres du coffre pour voir vos éléments archivés, puis utilisez le menu d'options (⋮) pour choisir <strong>Désarchiver</strong>.</p>
+    </div>
+    <div class="tab-panel" data-panel="arch-desktop">
+      <ol>
+        <li>Sélectionnez le ou les éléments à archiver, puis cliquez sur <strong>Archiver</strong> dans la barre d'actions.</li>
+        <li>Confirmez en cliquant sur <strong>Archiver</strong> dans la fenêtre.</li>
+      </ol>
+      <figure class="shot"><img src="assets/screens/arch-desktop.jpg" alt="Archiver — application bureau" loading="lazy"><figcaption>Archiver depuis la barre d'actions (application bureau)</figcaption></figure>
+      <h3>Désarchiver</h3>
+      <p>Sélectionnez <strong>Archive</strong> dans les filtres du coffre, cochez le ou les éléments à restaurer, puis choisissez <strong>Désarchiver</strong> dans la barre d'actions.</p>
+    </div>
+    <div class="tab-panel" data-panel="arch-cli">
+      <p>Pour archiver un élément :</p>
+      <pre><code>bw archive item &lt;item-id&gt;</code></pre>
+      <p>Pour afficher les éléments archivés :</p>
+      <pre><code>bw list --archive</code></pre>
+    </div>
+  </section>
+
+  <!-- 5. SUPPRIMER -->
+  <section id="supprimer">
+    <h2><span class="num">5</span> Supprimer un élément</h2>
+    <p class="lead">Choisissez votre plateforme pour voir comment supprimer un élément.</p>
+    <div class="tabs" role="tablist" data-group="del">
+      <button class="tab-btn active" data-tab="del-web">💻 Application web</button>
+      <button class="tab-btn" data-tab="del-ext">🧩 Extension navigateur</button>
+      <button class="tab-btn" data-tab="del-mobile">📱 Mobile</button>
+      <button class="tab-btn" data-tab="del-desktop">🖥️ Application bureau</button>
+      <button class="tab-btn" data-tab="del-cli">⌨️ Ligne de commande</button>
+    </div>
+    <div class="tab-panel active" data-panel="del-web">
+      <p>Ouvrez le <strong>menu d'options</strong> (⋮) de l'élément et choisissez <strong>Supprimer</strong> (Delete). Vous pouvez aussi supprimer plusieurs éléments à la fois via la barre d'actions.</p>
+      <div class="shots-2">
+        <figure class="shot"><img src="assets/screens/del-web.jpg" alt="Supprimer un élément — application web" loading="lazy"><figcaption>Supprimer via le menu d'options</figcaption></figure>
+        <figure class="shot"><img src="assets/screens/del-web-bulk.jpg" alt="Supprimer plusieurs éléments — application web" loading="lazy"><figcaption>Supprimer plusieurs éléments via la barre d'actions</figcaption></figure>
+      </div>
+    </div>
+    <div class="tab-panel" data-panel="del-ext">
+      <p>Cliquez sur l'élément pour l'ouvrir, puis sur l'<strong>icône Supprimer</strong> (corbeille).</p>
+      <figure class="shot"><img src="assets/screens/del-ext.jpg" alt="Supprimer un élément — extension navigateur" loading="lazy"><figcaption>Ouvrir l'élément puis l'icône Supprimer (extension navigateur)</figcaption></figure>
+    </div>
+    <div class="tab-panel" data-panel="del-mobile">
+      <p>Touchez l'élément pour l'ouvrir, puis ouvrez le <strong>menu d'options</strong> (⋮) et choisissez <strong>Supprimer</strong>.</p>
+      <figure class="shot"><img src="assets/screens/del-mobile.jpg" alt="Supprimer un élément — mobile" loading="lazy"><figcaption>Menu d'options d'un élément (application mobile)</figcaption></figure>
+    </div>
+    <div class="tab-panel" data-panel="del-desktop">
+      <p>Cliquez sur l'élément pour l'ouvrir, puis sur l'<strong>icône Supprimer</strong>. Vous pouvez aussi supprimer plusieurs éléments à la fois via la barre d'actions.</p>
+      <div class="shots-2">
+        <figure class="shot"><img src="assets/screens/del-desktop.jpg" alt="Supprimer un élément — application bureau" loading="lazy"><figcaption>Supprimer un élément ouvert</figcaption></figure>
+        <figure class="shot"><img src="assets/screens/del-desktop-bulk.jpg" alt="Supprimer plusieurs éléments — application bureau" loading="lazy"><figcaption>Supprimer plusieurs éléments via la barre d'actions</figcaption></figure>
+      </div>
+    </div>
+    <div class="tab-panel" data-panel="del-cli">
+      <p>Utilisez la commande <code>delete</code> pour supprimer un élément.</p>
+      <pre><code>bw delete item &lt;item-id&gt;</code></pre>
+    </div>
+
+    <h3>La corbeille du coffre</h3>
+    <p>Les éléments supprimés sont envoyés dans la <strong>corbeille</strong>, où ils restent <strong>30 jours</strong>. Passé ce délai, ils sont définitivement supprimés et non récupérables. Dans la corbeille, vous pouvez <strong>Restaurer</strong> un élément ou le <strong>Supprimer définitivement</strong> avant les 30 jours.</p>
+    <div class="callout warn">
+      <strong>Attention</strong>
+      Une suppression définitive (ou après 30 jours dans la corbeille) est irréversible : l'élément ne peut plus être récupéré.
+    </div>
+    <p><strong>Où trouver la corbeille :</strong></p>
+    <ul>
+      <li><strong>Application web</strong> : sélectionnez <strong>Corbeille</strong> (Trash) dans le menu Filtres.</li>
+      <li><strong>Extension navigateur</strong> : <strong>Paramètres</strong> → <strong>Coffre</strong> → <strong>Corbeille</strong>.</li>
+      <li><strong>Mobile</strong> : onglet <strong>Coffres</strong>, faites défiler jusqu'à <strong>Corbeille</strong>.</li>
+      <li><strong>Application bureau</strong> : sélectionnez <strong>Corbeille</strong> dans le menu de navigation.</li>
+    </ul>
+    <div class="shots-2">
+      <figure class="shot"><img src="assets/screens/trash-web.jpg" alt="Corbeille — application web" loading="lazy"><figcaption>La corbeille dans l'application web</figcaption></figure>
+      <figure class="shot"><img src="assets/screens/trash-ext.jpg" alt="Corbeille — extension navigateur" loading="lazy"><figcaption>La corbeille dans l'extension navigateur</figcaption></figure>
+      <figure class="shot"><img src="assets/screens/trash-mobile.jpg" alt="Corbeille — mobile" loading="lazy"><figcaption>La corbeille sur mobile</figcaption></figure>
+      <figure class="shot"><img src="assets/screens/trash-desktop.jpg" alt="Corbeille — application bureau" loading="lazy"><figcaption>La corbeille dans l'application bureau</figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 6. CLONER -->
+  <section id="cloner">
+    <h2><span class="num">6</span> Dupliquer (cloner) un élément</h2>
+    <p class="lead">Vous pouvez dupliquer n'importe quel élément dont vous êtes propriétaire, pour en créer une copie. Un élément appartenant à une organisation ne peut être cloné que par les membres ayant l'accès <strong>« Peut gérer »</strong> sur la collection, et uniquement depuis l'application web.</p>
+    <div class="tabs" role="tablist" data-group="clone">
+      <button class="tab-btn active" data-tab="clone-web">💻 Application web</button>
+      <button class="tab-btn" data-tab="clone-ext">🧩 Extension navigateur</button>
+      <button class="tab-btn" data-tab="clone-mobile">📱 Mobile</button>
+      <button class="tab-btn" data-tab="clone-desktop">🖥️ Application bureau</button>
+    </div>
+    <div class="tab-panel active" data-panel="clone-web">
+      <p>Ouvrez le <strong>menu d'options</strong> (⋮) de l'élément à dupliquer et choisissez <strong>Cloner</strong> (Clone).</p>
+      <figure class="shot"><img src="assets/screens/clone-web.jpg" alt="Cloner un élément — application web" loading="lazy"><figcaption>Menu d'options puis « Clone » (application web)</figcaption></figure>
+    </div>
+    <div class="tab-panel" data-panel="clone-ext">
+      <p>Ouvrez le <strong>menu d'options</strong> (⋮) de l'élément à dupliquer et choisissez <strong>Cloner</strong> (Clone).</p>
+      <figure class="shot"><img src="assets/screens/clone-ext.jpg" alt="Cloner un élément — extension navigateur" loading="lazy"><figcaption>Menu d'options puis « Clone » (extension navigateur)</figcaption></figure>
+    </div>
+    <div class="tab-panel" data-panel="clone-mobile">
+      <p>Touchez l'élément pour l'ouvrir, puis ouvrez le <strong>menu d'options</strong> (⋮) et choisissez <strong>Cloner</strong>.</p>
+      <figure class="shot"><img src="assets/screens/clone-mobile.jpg" alt="Cloner un élément — mobile" loading="lazy"><figcaption>Menu d'options d'un élément (application mobile)</figcaption></figure>
+    </div>
+    <div class="tab-panel" data-panel="clone-desktop">
+      <p>Ouvrez le <strong>menu d'options</strong> (⋮) de l'élément à dupliquer et choisissez <strong>Cloner</strong> (Clone).</p>
+      <figure class="shot"><img src="assets/screens/clone-desktop.jpg" alt="Cloner un élément — application bureau" loading="lazy"><figcaption>Menu d'options puis « Clone » (application bureau)</figcaption></figure>
+    </div>
+    <div class="callout note">
+      <strong>Remarque</strong>
+      Les clés d'accès (passkeys) ne sont <em>pas</em> copiées lors du clonage. Le nouvel élément reprend tous les détails de l'original, sauf le champ de la clé d'accès qui reste vide.
+    </div>
+  </section>
+
+  <!-- 7. PARTAGER -->
+  <section id="partager">
+    <h2><span class="num">7</span> Partager un élément</h2>
+    <p class="lead">Si vous êtes membre d'une <strong>organisation</strong>, vous pouvez assigner des éléments de votre coffre aux collections de l'organisation. Cela transfère la propriété de l'élément à l'organisation.</p>
+    <p>Pour partager avec d'autres membres de l'organisation, sélectionnez le ou les éléments, puis utilisez l'option <strong>Assigner aux collections</strong> (Assign to collections) dans la barre d'actions.</p>
+    <figure class="shot"><img src="assets/screens/share.jpg" alt="Assigner aux collections — application web" loading="lazy"><figcaption>Assigner des éléments aux collections via la barre d'actions</figcaption></figure>
+  </section>
+
+  <!-- 8. SUITE -->
+  <section id="suite">
+    <h2><span class="num">8</span> Pour aller plus loin</h2>
+    <p class="lead">Maintenant que vous maîtrisez les bases, voici quelques pistes utiles :</p>
+    <ul>
+      <li>Naviguer dans votre coffre grâce à la <strong>recherche</strong>, aux <strong>filtres</strong>, aux <strong>favoris</strong> et aux <strong>dossiers</strong>.</li>
+      <li>Enrichir vos éléments avec des <strong>champs personnalisés</strong>, des <strong>codes de vérification (TOTP)</strong> et des <strong>pièces jointes</strong>.</li>
+    </ul>
+    <div class="callout tip">
+      <strong>Sur le même sujet</strong>
+      Consultez aussi notre guide : <a href="importer.html">Importer vos mots de passe dans Bitwarden</a>.
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <img src="assets/logo-doro-blanc.svg" alt="DORO — Packaging de luxe">
+  <p>Guide interne rédigé par le Support Informatique DORO, à partir de la documentation officielle Bitwarden.</p>
+  <p>Source : <a href="https://bitwarden.com/help/managing-items/" target="_blank" rel="noopener">bitwarden.com/help/managing-items</a>.</p>
+  <p class="updated">En cas de difficulté, contactez le <a href="mailto:support@doro.mc">Support Informatique</a>.</p>
+</footer>
+
+<script>
+  // Onglets — chaque bouton cible un panneau unique (data-tab = data-panel),
+  // et ne bascule que les panneaux de son propre groupe.
+  document.querySelectorAll('.tabs').forEach(group=>{
+    const btns=[...group.querySelectorAll('.tab-btn')];
+    const names=btns.map(b=>b.dataset.tab);
+    const panels=names.map(n=>document.querySelector('.tab-panel[data-panel="'+n+'"]'));
+    btns.forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        btns.forEach(b=>b.classList.toggle('active',b===btn));
+        panels.forEach(p=>{ if(p) p.classList.toggle('active', p.dataset.panel===btn.dataset.tab); });
+      });
+    });
+  });
+</script>
+</body>
+</html>
